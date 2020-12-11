@@ -7,7 +7,7 @@ Based on data.table and ggplot2
 
 
 
-![Data](misc/vg.JPG)
+![Data](misc/vg.jpg)
 
 ![Plot](misc/preview.jpg)
 
