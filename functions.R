@@ -23,15 +23,17 @@ removeBackslashN <- function(x){
   gsub("\\n", "", x)
 }
 
-
 generateAllFiles <- function(){
-  dateMin  <- as.Date('2020-11-09')
-  dateMax  <- Sys.Date()
-  allDates <- format(seq(dateMin , dateMax, by="day"), "%Y%m%d")
-  allHours <- c("04","08","11","14","17","21")
+  dayMin  <- as.Date('2020-11-09', tz="UTC")
+  dayMax  <- as.Date(format(Sys.time(), tz="UTC"))
   
-  unlist(lapply(allDates, FUN=function(x)
-    paste("vendeeglobe_", x, "_", allHours, "0000.xlsx", sep = "")))
+  allDates <- format(seq(dayMin , dayMax, by="day"), "%Y%m%d")
+  allHours <- c("04","08","11","14","17","21")
+  allDates <-  as.POSIXct(c(outer(allDates, allHours, FUN=paste0)),tryFormats = c("%Y%m%d%H"), tz="UTC")
+  allDates <- allDates[allDates<Sys.time()]
+  allDates <- allDates[order(allDates)]
+
+    format(allDates, "vendeeglobe_%Y%m%d%_%H0000.xlsx" )
 }
 
 getMissingFiles <- function(){
@@ -75,6 +77,7 @@ createCompleteSet <- function(){
   
   vg[Voile=="GBR 99", Bateau:="Hugo Boss"]
   vg[,Heure:=format(dt, "%d/%m/%Y %H:00:00")]
+  vg[, Place:=as.numeric(Rang)]
   vg
 }
 
