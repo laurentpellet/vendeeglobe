@@ -117,8 +117,14 @@ createGraphe <- function(nbCoureurs, nbJours, variable){
   dateMax <- max(vg$dt)
   dateMin <- dateMax %m+% days(-nbJours)
   dateMaxLabel <- dateMax %m+% hours(18)
-  dataPlot <- vg[Voile %in% aSuivre & dt>dateMin & DTL!=0]
-  dataPlotLabel <- vg[Voile %in% aSuivre & dt==dateMax & DTL!=0]
+  if(variable!="DTL"){
+    dataPlot <- vg[Voile %in% aSuivre & dt>dateMin]
+    dataPlotLabel <- vg[Voile %in% aSuivre & dt==dateMax]
+  }
+  else{
+    dataPlot <- vg[Voile %in% aSuivre & dt>dateMin & DTL!=0]
+    dataPlotLabel <- vg[Voile %in% aSuivre & dt==dateMax & DTL!=0]
+  }
   
   ggplot(dataPlot)+
     geom_line(aes_string(x="dt", y=variable, group="Skipper", colour="Skipper"))+
